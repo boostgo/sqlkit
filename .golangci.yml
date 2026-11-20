@@ -1,0 +1,60 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - bodyclose
+    - contextcheck
+    - errorlint
+    - gocritic
+    - gosec
+    - misspell
+    - nakedret
+    - noctx
+    - prealloc
+    - revive
+    - rowserrcheck
+    - sqlclosecheck
+    - unconvert
+    - unparam
+  settings:
+    revive:
+      rules:
+        - name: exported
+          arguments:
+            - disableStutteringCheck
+        - name: package-comments
+        - name: var-naming
+        - name: error-strings
+        - name: receiver-naming
+        - name: indent-error-flow
+    staticcheck:
+      checks:
+        - all
+        - "-QF1008" # omit embedded fields from selector expression
+        - "-ST1003" # naming: keep the established public API names
+  exclusions:
+    generated: lax
+    presets:
+      - common-false-positives
+      - std-error-handling
+    rules:
+      - path: _test\.go
+        linters:
+          - gosec
+          - noctx
+          - unparam
+          - contextcheck
+          - rowserrcheck
+          - sqlclosecheck
+      - path: examples/
+        linters:
+          - revive
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
